@@ -29,6 +29,7 @@ def load_urls(request):
                 wrong_urls += url
 
         return HttpResponse('done{}'.format(wrong_urls))
+    return HttpResponse('no incoming data')
 
 
 def get_titles(request):
