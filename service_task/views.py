@@ -1,29 +1,30 @@
 # coding: utf-8
-import requests
 import json
-import lxml.html as html
-import lxml.etree as etree
 import re
 import urllib
 from django.http import HttpResponse
-from service_task.models import SiteInfo
 from django.views.decorators.csrf import csrf_exempt
-
-
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+from service_task.models import SiteInfo
 
 
 @csrf_exempt
 def load_urls(request):
     if request.method == 'POST':
-        urls = ['https://docs.djangoproject.com/en/1.10/intro/tutorial02/', 'https://vk.com/themusicend']
+        try:
+            urls = request.POST.items()[0][0].split(',')
+        except Exception:
+            return HttpResponse('wrong input')
+        wrong_urls = ', wrong_urls: '
         for url in urls:
-            response = urllib.urlopen(url).read()
-            title = re.findall(r'<title>.+', response)[0].replace('<title>', '').replace('</title>', '')
-            info = SiteInfo(title=title, url=url)
-            info.save()
-    return HttpResponse('done')
+            try:
+                response = urllib.urlopen(url).read()
+                title = re.findall(r'<title>.+', response)[0].replace('<title>', '').replace('</title>', '')
+                info = SiteInfo(title=title, url=url)
+                info.save()
+            except Exception:
+                wrong_urls += url
+
+        return HttpResponse('done{}'.format(wrong_urls))
 
 
 def get_titles(request):

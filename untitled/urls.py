@@ -18,7 +18,6 @@ from django.conf.urls import url
 from service_task import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
     url(r'^load_urls$', views.load_urls, name='load_urls'),
     url(r'^get_titles$', views.get_titles, name='get_titles'),
     # url(r'^admin/', admin.site.urls),

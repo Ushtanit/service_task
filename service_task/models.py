@@ -6,5 +6,5 @@ from django.utils.timezone import now
 
 class SiteInfo(models.Model):
     url = models.TextField(max_length=2048)
-    title = models.TextField(max_length=256)
+    title = models.CharField(max_length=255, unique=True)
     timestamp = models.DateTimeField(default=now)
