@@ -1,4 +1,5 @@
 # coding: utf-8
+import datetime
 import json
 import re
 import urllib
@@ -23,8 +24,14 @@ def load_urls(request):
             try:
                 response = urllib.urlopen(url).read()
                 title = re.findall(r'<title>.+', response)[0].replace('<title>', '').replace('</title>', '')
-                info = SiteInfo(title=title, url=url)
-                info.save()
+                old_info = SiteInfo.objects.filter(title=title).first()
+                if old_info:
+                    old_info.url = url
+                    old_info.timestamp = datetime.datetime.now()
+                    old_info.save()
+                else:
+                    info = SiteInfo(title=title, url=url)
+                    info.save()
             except Exception:
                 wrong_urls += url
 
