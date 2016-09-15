@@ -9,6 +9,10 @@ from service_task.models import SiteInfo
 
 @csrf_exempt
 def load_urls(request):
+    """
+        file with urls like:
+        https://docs.djangoproject.com/en/1.10/intro/tutorial02/, https://vk.com/themusicend
+    """
     if request.method == 'POST':
         try:
             urls = request.POST.items()[0][0].split(',')
